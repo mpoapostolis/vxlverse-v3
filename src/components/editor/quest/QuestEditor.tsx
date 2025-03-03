@@ -47,7 +47,6 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
       });
 
       // Show a toast or feedback that items were added
-      console.log(`Added ${items.length} items to requirements`);
     } else {
       const currentItems = quest.rewards.items || [];
 
@@ -73,9 +72,6 @@ export function QuestEditor({ quest, updateQuest }: QuestEditorProps) {
           items: newItems,
         },
       });
-
-      // Show a toast or feedback that items were added
-      console.log(`Added ${items.length} items to rewards`);
     }
 
     // Close the item selector after adding items

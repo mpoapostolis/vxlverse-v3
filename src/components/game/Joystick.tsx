@@ -1,8 +1,11 @@
 import { EcctrlJoystick } from "ecctrl";
 import { MeshStandardMaterial, SphereGeometry } from "three";
+import { useGameStore } from "../../stores/gameStore";
+import { cn } from "../UI";
 export function Joystick() {
+  const { activeNpc } = useGameStore();
   return (
-    <div className="md:hidden">
+    <div className={cn("md:hidden ", { hidden: activeNpc })}>
       <EcctrlJoystick
         joystickStickProps={{
           material: new MeshStandardMaterial({

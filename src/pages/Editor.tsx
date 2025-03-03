@@ -28,12 +28,17 @@ import {
   Plus,
   Gauge,
   Eye,
+  Save,
 } from "lucide-react";
 import { toast } from "../components/UI/Toast";
 import { EditorScene } from "../components/editor/EditorScene";
 import { Tooltip } from "../components/UI/Tooltip";
 import { Player } from "../components/game/Player";
 import { Hero } from "../components/game/Hero";
+import { useParams } from "react-router-dom";
+import { pb } from "../lib/pocketbase";
+import { useGame } from "../hooks/useGame";
+import { useSyncGameState } from "../hooks/useSyncEditor";
 
 // Updated keyboard mapping for tools
 const KEYBOARD_MAP = [
@@ -56,14 +61,15 @@ const KEYBOARD_MAP = [
 ];
 
 export function Editor() {
+  const { id = "" } = useParams<{ id: string }>();
   return (
     <KeyboardControls map={KEYBOARD_MAP}>
-      <_Editor />
+      <_Editor gameId={id} />
     </KeyboardControls>
   );
 }
 
-export function _Editor() {
+export function _Editor({ gameId }: { gameId: string }) {
   const {
     scenes,
     currentSceneId,
@@ -99,7 +105,9 @@ export function _Editor() {
       createNewScene("New Scene");
     }
   }, [scenes, createNewScene]);
-
+  const { id } = useParams<{ id: string }>();
+  useGame(id!);
+  useSyncGameState(id!);
   const [subscribeKeys] = useKeyboardControls();
 
   useEffect(() => {
@@ -562,6 +570,23 @@ export function _Editor() {
                     }`}
                   >
                     <Play className="w-4 h-4" />
+                  </button>
+                </Tooltip>
+
+                <Tooltip position="top" content="Publish">
+                  <button
+                    onClick={() => {
+                      const { publishGame } = useUpdateGame();
+
+                      if (gameId) {
+                        publishGame(gameId);
+                      } else {
+                        toast.error("Game ID not found");
+                      }
+                    }}
+                    className="w-10 h-full flex items-center justify-center transition-all duration-200 text-slate-400 hover:bg-green-900/30 hover:text-green-300"
+                  >
+                    <Save className="w-4 h-4" />
                   </button>
                 </Tooltip>
               </div>

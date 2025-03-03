@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/games" element={<Games />} />
         <Route path="/play/:id" element={<Game />} />
         <Route
-          path="/editor"
+          path="/editor/:id"
           element={
             <ProtectedRoute>
               <Editor />

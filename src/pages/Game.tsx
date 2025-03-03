@@ -13,12 +13,14 @@ import { EnemyRewardModal } from "../components/game/EnemyReward";
 import { LevelUpModal } from "../components/game/LevelUpModal";
 import { useParams } from "react-router-dom";
 import { GameScene } from "../components/game/Scene";
-import { EcctrlJoystick } from "ecctrl";
-import { MeshBasicMaterial, SphereGeometry } from "three";
 import { Joystick } from "../components/game/Joystick";
+import { useGame } from "../hooks/useGame";
 
 export function Game() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const { isLoading } = useGame(id!);
+  useGame(id!);
+
   // Game state management
   const gameState = useGameStore((state) => ({
     currentSceneId: state.currentSceneId,
@@ -28,12 +30,10 @@ export function Game() {
     questLogOpen: state.questLogOpen,
     timeOfDay: state.timeOfDay,
   }));
-
   // Editor state for scene data
   const scenes = useEditorStore((state) => state.scenes);
   const currentScene =
-    scenes.find((scene) => scene.id === gameState.currentSceneId) ??
-    scenes?.at(0);
+    scenes.find((scene) => scene.id === gameState.currentSceneId) ?? scenes[0];
 
   // Enemy rewards state
   const { rewards, clearRewards } = useEnemyStore((state) => ({
@@ -79,7 +79,6 @@ export function Game() {
       <div key={gameState.currentSceneId} className="w-full h-full">
         {/* 3D Scene */}
 
-        <Joystick />
         <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
           <Suspense fallback={null}>
             <GameScene sceneData={currentScene} />
@@ -103,6 +102,7 @@ export function Game() {
 
       {/* Game UI */}
       <GameHUD />
+      <Joystick />
 
       {/* Modals */}
       {gameState.inventoryOpen && <Inventory />}

@@ -8,10 +8,10 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const isAuthenticated = pb.authStore.isValid;
 
-  if (!isAuthenticated) {
-    // Redirect to home if not authenticated
-    return <Navigate to="/" replace />;
-  }
+  // if (!isAuthenticated) {
+  //   // Redirect to home if not authenticated
+  //   return <Navigate to="/" replace />;
+  // }
 
   return <>{children}</>;
 }

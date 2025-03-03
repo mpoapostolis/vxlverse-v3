@@ -5,6 +5,7 @@ import {
   Html,
   Billboard,
   Outlines,
+  Box,
 } from "@react-three/drei";
 import { useGameStore } from "../../stores/gameStore";
 import * as THREE from "three";
@@ -47,25 +48,23 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
 
   // Check if this NPC has available quests
 
-  const hasAvailableQuests = useMemo(() => {
-    if (
-      !props.quests ||
-      !Array.isArray(props.quests) ||
-      props.quests.length === 0
-    ) {
-      return false;
-    }
-
-    return props.quests.some((quest) => {
-      return quest && !quest.completed;
-    });
-  }, [props.quests]);
-
   useEffect(() => {
     if (props.animations?.idle) {
       actions[props.animations.idle]?.play();
     }
   }, [props.animations, actions]);
+
+  const { position, rotation, scale } = useMemo(() => {
+    return {
+      position: new THREE.Vector3(
+        props.position.x,
+        props.position.y,
+        props.position.z
+      ),
+      rotation: new THREE.Euler().copy(props.rotation),
+      scale: new THREE.Vector3(props.scale.x, props.scale.y, props.scale.z),
+    };
+  }, [props.position, props.rotation, props.scale]);
   return (
     <>
       <primitive
@@ -78,16 +77,16 @@ export function GameObject(props: GameObject & { thumbnail: string }) {
           }
         }}
         ref={ref}
-        scale={props.scale}
-        position={props.position}
-        rotation={props.rotation}
+        scale={scale}
+        position={position}
+        rotation={rotation}
         object={gltf.scene}
       />
 
       {/* <Helper type={"axesHelper"} /> */}
       {/* Quest indicator */}
       {gltf.height && (
-        <group scale={props.scale} position={props.position}>
+        <group scale={scale} rotation={rotation} position={position}>
           <Html distanceFactor={15} center position={[0, gltf.height * 1.1, 0]}>
             <div className="quest-indicator">
               <div className="exclamation-mark">!</div>

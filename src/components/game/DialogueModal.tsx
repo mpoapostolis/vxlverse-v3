@@ -267,7 +267,7 @@ export function DialogueModal() {
 
   return (
     <Portal>
-      <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-10 px-4 pb-4 md:pb-8">
+      <div className="fixed inset-0 flex items-end justify-center pointer-events-none z-50 px-4 pb-4 md:pb-8">
         <div className="w-full max-w-2xl bg-gray-900/95 backdrop-blur-lg border border-indigo-500/30 rounded-t-lg shadow-2xl pointer-events-auto max-h-[80vh] flex flex-col transform transition-all duration-200 ease-in-out animate-fadeIn">
           {/* Header with title and controls */}
           <div className="flex justify-between items-center p-3 border-b border-indigo-500/20 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-t-lg">

@@ -36,7 +36,7 @@ const createDefaultScene = (name: string, id: string): Scene => ({
   },
 });
 
-interface EditorState {
+export interface EditorState {
   scenes: Scene[];
   currentSceneId: string | null;
   selectedObjectId: string | null;
@@ -247,7 +247,6 @@ export const useEditorStore = create<EditorState>()(
           ?.objects.find((o) => o.id === get().selectedObjectId);
         if (!object) return;
         const obj = new THREE.Object3D();
-        console.log(object, obj);
         // Create a new object based on the brush template
         const newObject = {
           id: new THREE.Object3D().uuid,

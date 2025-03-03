@@ -161,53 +161,6 @@ export function EditorGameObject({
     };
   }, [actions, mixer, isSelected, selectedObject?.activeAnimation]);
 
-  // Update the animation mixer on each frame
-  useEffect(() => {
-    // Skip if there's no mixer or no animations
-    if (!mixer || !animations || animations.length === 0) return;
-
-    // Create animation loop
-    const animationLoop = (delta: number) => {
-      mixer.update(delta);
-    };
-
-    // Add to render loop
-    // const unsubscribe = useThree.subscribe(({ clock }) => {
-    //   animationLoop(clock.getDelta());
-    // });
-
-    // return () => {
-    //   unsubscribe();
-    // };
-  }, [mixer, animations]);
-
-  /**
-   * Handle click events.
-   * Stops propagation if not in brush mode, plays sound if defined,
-   * and if in brush mode places a new object using grid snapping.
-   */
-  const handleClick = (e: THREE.Event) => {
-    if (!brushActive) e.stopPropagation();
-
-    if (selectedObject?.interactionSound) {
-      playSound(selectedObject.interactionSound);
-    }
-
-    if (brushActive && currentSceneId && e.point) {
-      let newPosition = e.point.clone();
-      if (gridSnap) {
-        newPosition.x = Math.round(newPosition.x * 2) / 2;
-        newPosition.y = Math.round(newPosition.y * 2) / 2;
-        newPosition.z = Math.round(newPosition.z * 2) / 2;
-      }
-      placeObjectWithBrush(currentSceneId, newPosition);
-      toast.success("Object placed successfully");
-      return;
-    }
-
-    // if (onClick) onClick(e);
-  };
-
   // Drag start and end handlers.
   const handleDragStart = () => {
     setIsDragging(true);
